@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta name="author" content="sunder">
+<meta name="keywords" content="Twitch, Broadcast">
+<meta name="viewport" content="width= device-width, initial-scale=1">
+<title> Wiki Search </title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<script src="js/jquery.js"></script>
+
+<script>
+  $(document).ready(function(){
+
+        console.log("Hello world");
+        var followers=[];
+        var logo;
+        var name;
+        var status;
+
+        // var url="https://api.twitch.tv/kraken/streams/freecodecamp";
+        // $.getJSON(url, function(data){
+        //
+        //     if(data.stream === null)
+        //     {
+        //     //  $("#helper").html("<h2>freecodecamp Not Streaming</h2>");
+        //       console.log("Not Streaming");
+        //     }
+        //     else {
+        //       console.log(" Streaming");
+        //     }
+        //     // console.table(data);
+        //     // console.log(data);
+        // });
+
+        var helperHTML = function(){
+          return   "<div id='addedElem'> <div class='col-md-4'>"+
+              "  <img id='myimage' alt='image.jpeg' class='img-circle' src="+ logo +"/>"+
+            " </div>"+
+
+            " <div class='col-md-4'>"+
+              "  <h3> "+name+ "</h3>" +
+            "  </div>"+
+
+            "<div class='col-md-4'>"+
+            "<h3>"+ status + "</h3>"+
+
+              "</div></div>";
+        }
+
+        $.getJSON("https://api.twitch.tv/kraken/users/freecodecamp/follows/channels/",function(data){
+            for(var i=0; i< data.follows.length; i++){
+              //console.log(data.follows[i].channel.display_name);
+                followers.push(data.follows[i].channel.display_name);
+            }
+            followers.push("ESL_SC2");
+            followers.push("RobotCaleb");
+
+            for(var i=0; i< followers.length; i++){
+              var url = "https://api.twitch.tv/kraken/streams/"+followers[i];//+"/?callback=?";
+
+              $.getJSON(url).done(function(data){
+                // console.log("Followers Loop");
+                if(data.error){
+                  logo="";
+                  name=data.message;
+                  status=data.error;
+                  $("#helper").prepend(helperHTML());
+                  console.log("data.error");
+
+                }
+
+                if(data.stream === null){
+                  $.getJSON(data._links.channel,function(datasample){
+                    logo = datasample.logo;
+                    status = "OFFLINE";
+                    name = datasample.name;
+
+                    $("#helper").prepend(helperHTML());
+                    console.log("data NULL");
+
+                  })
+                }
+
+              //  $.getJSON(url).done(function(data){
+
+                  if(data.stream !== null){
+                       logo= data.stream.channel.logo;
+                       status = "ONLINE";//data.stream.channel.status;
+                       name = data.stream.channel.display_name;
+                      $("#helper").prepend(helperHTML());
+                      console.log("Data !NULL");
+                  }
+
+                // });
+
+
+              })
+          }
+
+          // for(var i=0; i< followers.length; i++){
+          //   var url = "https://api.twitch.tv/kraken/streams/"+followers[i];
+          //
+          //   $.getJSON(url).done(function(data){
+          //
+          //           if(data.stream !== null){
+          //                logo= data.stream.channel.logo;
+          //                status = "ONLINE";//data.stream.channel.status;
+          //                name = data.stream.channel.display_name;
+          //               $("#helper").prepend(helperHTML());
+          //               console.log("Data !NULL");
+          //           }
+          //
+          //    });
+          // }
+
+
+        });
+  })
+
+</script>
+
+<style>
+
+#myimage{
+  height:50px;
+  width:70px;
+}
+
+body{
+  background-color: pink;
+  opacity: 0.8;
+  font-family: "Lobster";
+}
+#header{
+  background-color: black;
+  border: 5px solid white;
+  border-radius: 3px;
+  height:70px;
+  color: white;
+  padding-top: 10px;
+}
+
+#Appcontainer{
+  width:600px;
+}
+
+#addedElem{
+  height: 70px;
+}
+</style>
+
+
+</head>
+<body>
+
+<div class="container">
+  <div class="row text-center">
+    <div class="col-md-offset-3" id="Appcontainer">
+    <h1 id="header"> Twitch Streamers </h1>
+
+      <!-- <div id="mynavbar">
+          <div class="col-md-4">
+            <h3> ALL </h3>
+          </div>
+
+          <div class="col-md-4">
+            <h3> Online </h3>
+          </div>
+
+          <div class="col-md-4">
+              <h3> Offline </h3>
+          </div>
+        </div>
+
+          <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                </div>
+            </div> -->
+
+    <div class="output" id="helper"></div>
+
+  </div>
+</div>
+</div>
+
+</body>
+
+
+
+</html>
