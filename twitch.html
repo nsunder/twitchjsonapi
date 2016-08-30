@@ -36,15 +36,15 @@
         // });
 
         var helperHTML = function(){
-          return   "<div id='addedElem'> <div class='col-md-4'>"+
+          return   "<div id='addedElem'> <div class='col-md-4 col-xs-4'>"+
               "  <img id='myimage' alt='image.jpeg' class='img-circle' src="+ logo +"/>"+
             " </div>"+
 
-            " <div class='col-md-4'>"+
+            " <div class='col-md-4 col-xs-4'>"+
               "  <h3> "+name+ "</h3>" +
             "  </div>"+
 
-            "<div class='col-md-4'>"+
+            "<div class='col-md-4 col-xs-4'>"+
             "<h3>"+ status + "</h3>"+
 
               "</div></div>";
@@ -118,6 +118,22 @@
 
 
         });
+
+        $("button").click(function(){
+           console.log("Button Clicked");
+
+               if($("button").hasClass('orangeClr')) {
+              		$("button").removeClass('orangeClr');
+              		$(this).addClass('orangeClr');
+                  console.log("if");
+              	}
+              	else {
+                  console.log("esle");
+              		$(this).addClass('orangeClr');
+              	}
+           });
+
+
   })
 
 </script>
@@ -138,9 +154,8 @@ body{
   background-color: black;
   border: 5px solid white;
   border-radius: 3px;
-  height:70px;
+  height:90px;
   color: white;
-  padding-top: 10px;
 }
 
 #Appcontainer{
@@ -150,6 +165,23 @@ body{
 #addedElem{
   height: 70px;
 }
+
+#mynavbar > div > button{
+  width:200px;
+  height:50px;
+  font-size: 1.5em;
+  margin-left: -15px;
+}
+
+.orangeClr{
+  background-color: orange;
+}
+
+.blackClr{
+  background-color: black;
+}
+
+
 </style>
 
 
@@ -159,19 +191,21 @@ body{
 <div class="container">
   <div class="row text-center">
     <div class="col-md-offset-3" id="Appcontainer">
-    <h1 id="header"> Twitch Streamers </h1>
+      <div id="header">
+        <h1 > Twitch Streamers </h1>
+     </div>
 
-      <!-- <div id="mynavbar">
-          <div class="col-md-4">
-            <h3> ALL </h3>
+      <div id="mynavbar">
+          <div class="col-md-4 col-xs-4">
+              <button > ALL </button>
           </div>
 
-          <div class="col-md-4">
-            <h3> Online </h3>
+          <div class="col-md-4 col-xs-4">
+            <button > Online </button>
           </div>
 
-          <div class="col-md-4">
-              <h3> Offline </h3>
+          <div class="col-md-4 col-xs-4">
+            <button >  Offline </button>
           </div>
         </div>
 
@@ -180,7 +214,7 @@ body{
                 <div class="input-group-btn">
                     <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
                 </div>
-            </div> -->
+            </div>
 
     <div class="output" id="helper"></div>
 
