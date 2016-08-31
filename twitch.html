@@ -11,179 +11,7 @@
 <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 <script src="js/jquery.js"></script>
 
-<script>
-  $(document).ready(function(){
-
-        console.log("Hello world");
-        var followers=[];
-        var logo;
-        var name;
-        var status;
-
-        // var url="https://api.twitch.tv/kraken/streams/freecodecamp";
-        // $.getJSON(url, function(data){
-        //
-        //     if(data.stream === null)
-        //     {
-        //     //  $("#helper").html("<h2>freecodecamp Not Streaming</h2>");
-        //       console.log("Not Streaming");
-        //     }
-        //     else {
-        //       console.log(" Streaming");
-        //     }
-        //     // console.table(data);
-        //     // console.log(data);
-        // });
-
-        var helperHTML = function(){
-          return   "<div id='addedElem'> <div class='col-md-4 col-xs-4'>"+
-              "  <img id='myimage' alt='image.jpeg' class='img-circle' src="+ logo +"/>"+
-            " </div>"+
-
-            " <div class='col-md-4 col-xs-4'>"+
-              "  <h3> "+name+ "</h3>" +
-            "  </div>"+
-
-            "<div class='col-md-4 col-xs-4'>"+
-            "<h3>"+ status + "</h3>"+
-
-              "</div></div>";
-        }
-
-        $.getJSON("https://api.twitch.tv/kraken/users/freecodecamp/follows/channels/",function(data){
-            for(var i=0; i< data.follows.length; i++){
-              //console.log(data.follows[i].channel.display_name);
-                followers.push(data.follows[i].channel.display_name);
-            }
-            followers.push("ESL_SC2");
-            followers.push("RobotCaleb");
-
-            for(var i=0; i< followers.length; i++){
-              var url = "https://api.twitch.tv/kraken/streams/"+followers[i];//+"/?callback=?";
-
-              $.getJSON(url).done(function(data){
-                // console.log("Followers Loop");
-                if(data.error){
-                  logo="";
-                  name=data.message;
-                  status=data.error;
-                  $("#helper").prepend(helperHTML());
-                  console.log("data.error");
-
-                }
-
-                if(data.stream === null){
-                  $.getJSON(data._links.channel,function(datasample){
-                    logo = datasample.logo;
-                    status = "OFFLINE";
-                    name = datasample.name;
-
-                    $("#helper").prepend(helperHTML());
-                    console.log("data NULL");
-
-                  })
-                }
-
-              //  $.getJSON(url).done(function(data){
-
-                  if(data.stream !== null){
-                       logo= data.stream.channel.logo;
-                       status = "ONLINE";//data.stream.channel.status;
-                       name = data.stream.channel.display_name;
-                      $("#helper").prepend(helperHTML());
-                      console.log("Data !NULL");
-                  }
-
-                // });
-
-
-              })
-          }
-
-          // for(var i=0; i< followers.length; i++){
-          //   var url = "https://api.twitch.tv/kraken/streams/"+followers[i];
-          //
-          //   $.getJSON(url).done(function(data){
-          //
-          //           if(data.stream !== null){
-          //                logo= data.stream.channel.logo;
-          //                status = "ONLINE";//data.stream.channel.status;
-          //                name = data.stream.channel.display_name;
-          //               $("#helper").prepend(helperHTML());
-          //               console.log("Data !NULL");
-          //           }
-          //
-          //    });
-          // }
-
-
-        });
-
-        $("button").click(function(){
-           console.log("Button Clicked");
-
-               if($("button").hasClass('orangeClr')) {
-              		$("button").removeClass('orangeClr');
-              		$(this).addClass('orangeClr');
-                  console.log("if");
-              	}
-              	else {
-                  console.log("esle");
-              		$(this).addClass('orangeClr');
-              	}
-           });
-
-
-  })
-
-</script>
-
-<style>
-
-#myimage{
-  height:50px;
-  width:70px;
-}
-
-body{
-  background-color: pink;
-  opacity: 0.8;
-  font-family: "Lobster";
-}
-#header{
-  background-color: black;
-  border: 5px solid white;
-  border-radius: 3px;
-  height:90px;
-  color: white;
-}
-
-#Appcontainer{
-  width:600px;
-}
-
-#addedElem{
-  height: 70px;
-}
-
-#mynavbar > div > button{
-  width:200px;
-  height:50px;
-  font-size: 1.5em;
-  margin-left: -15px;
-}
-
-.orangeClr{
-  background-color: orange;
-}
-
-.blackClr{
-  background-color: black;
-}
-
-
-</style>
-
+<link rel="stylesheet" href="styles.css">
 
 </head>
 <body>
@@ -197,15 +25,15 @@ body{
 
       <div id="mynavbar">
           <div class="col-md-4 col-xs-4">
-              <button > ALL </button>
+              <button data-display="all"> ALL </button>
           </div>
 
           <div class="col-md-4 col-xs-4">
-            <button > Online </button>
+             <button data-display="online"> Online </button>
           </div>
 
           <div class="col-md-4 col-xs-4">
-            <button >  Offline </button>
+             <button data-display="offline"> Offline </button>
           </div>
         </div>
 
@@ -216,14 +44,14 @@ body{
                 </div>
             </div>
 
-    <div class="output" id="helper"></div>
+          <div class="output" id="helper"></div>
+
 
   </div>
 </div>
 </div>
 
+<script src="app.js"></script>
+
 </body>
-
-
-
 </html>
